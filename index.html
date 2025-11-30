@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A3</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+<body>
+
+<div class="toolbar">
+    <label>Question:</label>
+
+    <select id="questionSelect">
+        <option value="Percentage of older adults who are currently obese, with a body mass index (BMI) of 30 or more">Obese (BMI ≥ 30)</option>
+        <option value="Percentage of older adults who have smoked at least 100 cigarettes in their entire life and still smoke every day or some days">Smokers (100 cigarettes)</option>
+        <option value="Percentage of older adults who provided care for someone with dementia or other cognitive impairment within the past month">Caregivers</option>
+    </select>
+
+    <span id="lineIcon" class="material-icons chart-icon">show_chart</span>
+    <span id="barIcon" class="material-icons chart-icon">bar_chart</span>
+</div>
+
+<div class="container">
+    <div id="chart"></div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
