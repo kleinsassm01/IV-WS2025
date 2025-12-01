@@ -1,9 +1,9 @@
-import { BoxChartController } from "./barChartController.js";
-import { ChartController } from "./chartController.js";
-import { DataService } from "./dataService.js";
-import { BarChart } from "./barChart.js";
-import { LineChart } from "./lineChart.js";
-import { AxisManager } from "./AxisManager.js"
+import { BoxChartController } from "./boxchartcontroller.js";
+import { ChartController } from "./chartcontroller.js";
+import { DataService } from "./dataservice.js";
+import { BarChart } from "./barchart.js";
+import { AxisManager } from "./axismanager.js"
+import { LineChart } from "./linechart.js";
 
 export const MARGIN = { top: 70, right: 40, bottom: 50, left: 60 };
 export const WIDTH = 900 - MARGIN.left - MARGIN.right;

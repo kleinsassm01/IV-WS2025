@@ -1,4 +1,4 @@
-import { wrapText } from "./Formatter.js";
+import { wrapText } from "./formatter.js";
 import { MODE_BAR, MODE_LINE } from "./main.js";
 
 export class ChartController {
