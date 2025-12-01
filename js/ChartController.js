@@ -1,5 +1,5 @@
-import { wrapText } from "./formatter.js";
-import { MODE_BAR, MODE_LINE } from "./script.js";
+import { wrapText } from "./Formatter.js";
+import { MODE_BAR, MODE_LINE } from "./main.js";
 
 export class ChartController {
     constructor(svg, axis, lineChart, barChart, titleEl) {
