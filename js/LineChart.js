@@ -1,8 +1,8 @@
 export class LineChart {
-    constructor(svg, xAxis, yAxis) {
+    constructor(svg, axis, tooltip) {
         this.svg = svg;
-        this.xAxis = xAxis;
-        this.yAxis = yAxis;
+        this.axis = axis;
+        this.tooltip = tooltip;
 
         this.path = svg.append("path")
             .attr("class", "trend-line")
@@ -12,34 +12,45 @@ export class LineChart {
     }
 
     draw(data) {
-        const x = this.xAxis.scale();
-        const y = this.yAxis.scale();
+        const x = this.axis.xScale;
+        const y = this.axis.yScale;
 
         const line = d3.line()
             .x(d => x(d.YearStart))
             .y(d => y(d.Data_Value));
 
+        // clear bars
         this.svg.selectAll("rect.bar").remove();
 
+        // draw path
         this.path.datum(data)
             .transition()
             .duration(600)
             .attr("d", line)
             .style("opacity", 1);
 
+        // Points
         const points = this.svg.selectAll("circle.point")
             .data(data, d => d.YearStart);
 
         points.enter()
             .append("circle")
             .attr("class", "point")
-            .attr("r", 5)
+            .attr("r", 0)
             .attr("fill", "red")
+            .on("mouseover", (event, d) => {
+                this.tooltip.style("opacity", 1)
+                    .html(`Year: ${d.YearStart}<br>Value: ${d.Data_Value.toFixed(1)}%`)
+                    .style("left", (event.pageX + 12) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", () => this.tooltip.style("opacity", 0))
             .merge(points)
             .transition()
             .duration(600)
             .attr("cx", d => x(d.YearStart))
-            .attr("cy", d => y(d.Data_Value));
+            .attr("cy", d => y(d.Data_Value))
+            .attr("r", 5);
 
         points.exit().remove();
     }

@@ -1,23 +1,18 @@
-import { LineChart } from "./LineChart.js";
-import { BarChart } from "./BarChart.js";
-import { wrapText } from "./Utils.js";
+import { wrapText } from "./Formatter.js";
 
 export class ChartController {
-    constructor(svg, xAxis, yAxis, titleEl) {
+    constructor(svg, axis, lineChart, barChart, titleEl) {
         this.svg = svg;
-        this.xAxis = xAxis;
-        this.yAxis = yAxis;
+        this.axis = axis;
+        this.lineChart = lineChart;
+        this.barChart = barChart;
         this.titleEl = titleEl;
-        this.chartMode = "line";
 
-        this.charts = {
-            line: new LineChart(svg, xAxis, yAxis),
-            bar: new BarChart(svg, xAxis, yAxis)
-        };
+        this.mode = "line";
     }
 
     setMode(mode) {
-        this.chartMode = mode;
+        this.mode = mode;
     }
 
     updateTitle(question) {
@@ -25,6 +20,14 @@ export class ChartController {
     }
 
     update(data) {
-        this.charts[this.chartMode].draw(data);
+        const isBar = this.mode === "bar";
+        this.axis.setDomains(data, isBar);
+        this.axis.drawAxes(isBar);
+
+        if (this.mode === "line") {
+            this.lineChart.draw(data);
+        } else {
+            this.barChart.draw(data);
+        }
     }
 }

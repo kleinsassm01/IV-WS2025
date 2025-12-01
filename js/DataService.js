@@ -1,16 +1,20 @@
 export class DataService {
-    constructor(csvPath) {
-        this.csvPath = csvPath;
-        this.data = null;
+    constructor(csvParts) {
+        this.csvParts = csvParts;
+        this.data = [];
     }
 
     async load() {
-        const raw = await d3.csv(this.csvPath);
-        raw.forEach(d => {
+        const loaded = await Promise.all(
+            this.csvParts.map(path => d3.csv(path))
+        );
+
+        this.data = loaded.flat();
+
+        this.data.forEach(d => {
             d.YearStart = +d.YearStart;
             d.Data_Value = +d.Data_Value;
         });
-        this.data = raw;
     }
 
     getFiltered(question) {
