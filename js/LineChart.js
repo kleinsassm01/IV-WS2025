@@ -19,17 +19,14 @@ export class LineChart {
             .x(d => x(d.YearStart))
             .y(d => y(d.Data_Value));
 
-        // clear bars
         this.svg.selectAll("rect.bar").remove();
 
-        // draw path
         this.path.datum(data)
             .transition()
             .duration(600)
             .attr("d", line)
             .style("opacity", 1);
 
-        // Points
         const points = this.svg.selectAll("circle.point")
             .data(data, d => d.YearStart);
 

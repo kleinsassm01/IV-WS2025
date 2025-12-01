@@ -10,10 +10,16 @@
 <body>
 
 <div class="toolbar">
-    <label>Question:</label>
+    <div class="view-switcher">
+        <button id="btn-main-chart" class="view-btn active">Main Chart</button>
+        <button id="btn-boxplot" class="view-btn">Boxplot</button>
+    </div>
+</div>
+
+<div class="toolbar" id="toolbarId">
 
     <select id="questionSelect">
-        <option value="Percentage of older adults who are currently obese, with a body mass index (BMI) of 30 or more">Obese (BMI ≥ 30)</option>
+        <option value="Percentage of older adults who are currently obese, with a body mass index (BMI) of 30 or more">Obese (BMI above 30)</option>
         <option value="Percentage of older adults who have smoked at least 100 cigarettes in their entire life and still smoke every day or some days">Smokers (100 cigarettes)</option>
         <option value="Percentage of older adults who provided care for someone with dementia or other cognitive impairment within the past month">Caregivers</option>
     </select>
@@ -23,10 +29,16 @@
 </div>
 
 <div class="container">
-    <div id="chart"></div>
+    <div id="main-chart-wrapper" class="chart-wrapper">
+        <div id="chart"></div>
+    </div>
+
+    <div id="boxplot-wrapper" class="chart-wrapper" style="display:none;">
+        <div id="boxplot"></div>
+    </div>
 </div>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<script type="module" src="js/main.js"></script>
+<script type="module" src="js/script.js"></script>
 </body>
 </html>

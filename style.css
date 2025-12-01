@@ -19,15 +19,15 @@ body {
 
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 
-    width: 800px;
+    width: 920px;
     margin: 0 auto 20px auto;
 
-    height: 50px;
+    height: 56px;
 }
 
 .toolbar,
 #chart {
-    width: 800px;
+    width: 920px;
     padding: 0;
     box-sizing: border-box;
     margin-left: auto;
@@ -49,7 +49,6 @@ body {
     background: white;
 }
 
-/* Buttons/icons */
 .chart-icon {
     cursor: pointer;
     font-size: 22px;
@@ -64,17 +63,63 @@ body {
     border-color: #4c8bf5;
 }
 
+.view-switcher {
+    margin-left: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.view-btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.view-btn.active {
+    background: #e8f0fe;
+    border-color: #4c8bf5;
+}
+
 .container {
     display: flex;
     justify-content: center;
 }
 
-#chart {
+.chart-wrapper {
+    width: 920px;
+}
+
+#chart, #boxplot {
     padding: 10px;
     background: white;
     border-radius: 8px;
     border: 1px solid #ddd;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.boxplot-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
+}
+
+.small-btn {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.chart-title {
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .tooltip {

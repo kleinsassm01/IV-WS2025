@@ -1,4 +1,5 @@
-import { wrapText } from "./Formatter.js";
+import { wrapText } from "./formatter.js";
+import { MODE_BAR, MODE_LINE } from "./script.js";
 
 export class ChartController {
     constructor(svg, axis, lineChart, barChart, titleEl) {
@@ -8,7 +9,7 @@ export class ChartController {
         this.barChart = barChart;
         this.titleEl = titleEl;
 
-        this.mode = "line";
+        this.mode = MODE_LINE;
     }
 
     setMode(mode) {
@@ -20,11 +21,11 @@ export class ChartController {
     }
 
     update(data) {
-        const isBar = this.mode === "bar";
+        const isBar = this.mode === MODE_BAR;
         this.axis.setDomains(data, isBar);
         this.axis.drawAxes(isBar);
 
-        if (this.mode === "line") {
+        if (this.mode === MODE_LINE) {
             this.lineChart.draw(data);
         } else {
             this.barChart.draw(data);

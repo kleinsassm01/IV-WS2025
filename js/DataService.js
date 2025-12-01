@@ -1,36 +1,46 @@
 export class DataService {
     constructor(csvParts) {
-        this.csvParts = csvParts;
+        this.csvPaths = csvParts;
         this.data = [];
     }
 
     async load() {
         const loaded = await Promise.all(
-            this.csvParts.map(path => d3.csv(path))
+            this.csvPaths.map(p => d3.csv(p))
         );
 
-        this.data = loaded.flat();
+        this.data = loaded.flat().map(d => ({
+            ...d,
+            YearStart: +d.YearStart,
+            Data_Value: +d.Data_Value
+        }));
 
-        this.data.forEach(d => {
-            d.YearStart = +d.YearStart;
-            d.Data_Value = +d.Data_Value;
-        });
+        console.log(this.data)
     }
 
     getFiltered(question) {
         return this.data.filter(d =>
             d.Question === question &&
-            d.Stratification1 === "Overall" &&
-            d.Data_Value_Type === "Percentage"
+            d.Data_Value_Type === "Percentage" &&
+            (d.Stratification1 === "Overall" || !d.Stratification1)
         );
     }
 
     getYearlyAverages(question) {
         return d3.groups(this.getFiltered(question), d => d.YearStart)
-            .map(([year, values]) => ({
+            .map(([year, arr]) => ({
                 YearStart: year,
-                Data_Value: d3.mean(values, v => v.Data_Value)
+                Data_Value: d3.mean(arr, v => v.Data_Value)
             }))
             .sort((a, b) => a.YearStart - b.YearStart);
+    }
+
+    getBoxplotData(question) {
+        return this.data.filter(d =>
+            d.Question === question &&
+            d.Data_Value_Type === "Mean" &&
+            (d.StratificationCategory1 === "Age Group" ||
+             d.StratificationCategory === "Age Group")
+        );
     }
 }
