@@ -8,3 +8,5 @@ https://data.cdc.gov/Healthy-Aging/Alzheimer-s-Disease-and-Healthy-Aging-Data/hf
 The project was created in the necessary steps:
 - The repo was created on git and is orientating on the tutorials
 - The data is loaded is loaded as csv. The js is split up because it would be way to much in one file.
+
+git config core.ignorecase false

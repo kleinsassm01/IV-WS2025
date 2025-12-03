@@ -1,4 +1,3 @@
-import { wrapText } from "./formatter.js";
 import { MODE_BAR, MODE_LINE } from "./main.js";
 
 export class ChartController {
@@ -17,7 +16,7 @@ export class ChartController {
     }
 
     updateTitle(question) {
-        this.titleEl.text(question).call(wrapText, 300);
+        this.titleEl.text(question);
     }
 
     update(data) {

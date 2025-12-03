@@ -9,8 +9,8 @@ export class BoxChartController {
         this.question = "Mean number of days with activity limitations in the past month";
     }
 
-    init(width = 920, height = 450) {
-        this.chart = new BoxPlotChart(this.containerSelector, width, height, this.tooltip);
+    init() {
+        this.chart = new BoxPlotChart(this.containerSelector, this.tooltip);
     }
 
     render() {

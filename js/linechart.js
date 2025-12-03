@@ -1,3 +1,6 @@
+import { DURATION } from "./main.js";
+import { pointTooltipHTML } from "./tooltip.js";
+
 export class LineChart {
     constructor(svg, axis, tooltip) {
         this.svg = svg;
@@ -23,7 +26,7 @@ export class LineChart {
 
         this.path.datum(data)
             .transition()
-            .duration(600)
+            .duration(DURATION)
             .attr("d", line)
             .style("opacity", 1);
 
@@ -37,14 +40,14 @@ export class LineChart {
             .attr("fill", "red")
             .on("mouseover", (event, d) => {
                 this.tooltip.style("opacity", 1)
-                    .html(`Year: ${d.YearStart}<br>Value: ${d.Data_Value.toFixed(1)}%`)
+                    .html(pointTooltipHTML(d))
                     .style("left", (event.pageX + 12) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", () => this.tooltip.style("opacity", 0))
             .merge(points)
             .transition()
-            .duration(600)
+            .duration(DURATION)
             .attr("cx", d => x(d.YearStart))
             .attr("cy", d => y(d.Data_Value))
             .attr("r", 5);

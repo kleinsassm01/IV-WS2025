@@ -4,6 +4,7 @@ import { DataService } from "./dataservice.js";
 import { BarChart } from "./barchart.js";
 import { AxisManager } from "./axismanager.js"
 import { LineChart } from "./linechart.js";
+import { createSvg } from "./layout.js";
 
 export const MARGIN = { top: 70, right: 40, bottom: 50, left: 60 };
 export const WIDTH = 900 - MARGIN.left - MARGIN.right;
@@ -18,20 +19,17 @@ export const MODE_BAR = "bar";
 export const TOPIC_MAIN = "main";
 export const TOPIC_BOXPLOT = "boxplot";
 
-const svg = d3.select("#chart")
-    .append("svg")
-    .attr("width", WIDTH_OUT)
-    .attr("height", HEIGHT_OUT)
-    .append("g")
-    .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
+export const DURATION = 600
+
+const svg = createSvg("#chart");
 
 const tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip");
 
 function highlight(mode) {
-    d3.select("#lineIcon").classed("active", mode === "line");
-    d3.select("#barIcon").classed("active", mode === "bar");
+    d3.select("#lineIcon").classed("active", mode === MODE_LINE);
+    d3.select("#barIcon").classed("active", mode === MODE_BAR);
 }
 
 const title = svg.append("text")
@@ -41,7 +39,7 @@ const title = svg.append("text")
     .attr("text-anchor", "middle")
     .style("font-weight", "600");
 
-const axis = new AxisManager(svg, WIDTH, HEIGHT);
+const axis = new AxisManager(svg);
 
 const lineChart = new LineChart(svg, axis, tooltip);
 const barChart = new BarChart(svg, axis, tooltip);

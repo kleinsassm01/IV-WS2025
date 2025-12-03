@@ -5,12 +5,12 @@ export function createXScale(groups, width) {
         .padding(0.4);
 }
 
-export function createYScale(values, height) {
-    const min = d3.min(values);
-    const max = d3.max(values);
+export function createYScale(boxStats, height) {
+    const minWhisker = d3.min(boxStats, d => d.lowerWhisker);
+    const maxWhisker = d3.max(boxStats, d => d.upperWhisker);
 
     return d3.scaleLinear()
-        .domain([Math.max(0, min - 1), max + 1])
+        .domain([minWhisker, maxWhisker])
         .range([height, 0])
         .nice();
 }

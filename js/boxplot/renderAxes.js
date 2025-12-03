@@ -1,9 +1,11 @@
-export function renderAxes(svg, xScale, yScale, innerHeight) {
+import { DURATION } from "../main.js";
+
+export function renderAxes(svg, xScale, yScale) {
     svg.xAxisG
-        .transition().duration(400)
+        .transition().duration(DURATION)
         .call(d3.axisBottom(xScale));
 
     svg.yAxisG
-        .transition().duration(400)
+        .transition().duration(DURATION)
         .call(d3.axisLeft(yScale));
 }
