@@ -15,7 +15,6 @@ export class DataService {
             Data_Value: +d.Data_Value
         }));
 
-        console.log(this.data)
     }
 
     getFiltered(question) {
@@ -35,12 +34,13 @@ export class DataService {
             .sort((a, b) => a.YearStart - b.YearStart);
     }
 
-    getBoxplotData(question) {
-        return this.data.filter(d =>
-            d.Question === question &&
+    getBoxplotData() {
+        const test = this.data.filter(d =>
+            d.Question === "Mean number of days with activity limitations in the past month" &&
             d.Data_Value_Type === "Mean" &&
             (d.StratificationCategory1 === "Age Group" ||
              d.StratificationCategory === "Age Group")
         );
+        return test;
     }
 }

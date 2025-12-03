@@ -1,14 +1,29 @@
-import { MODE_BAR, MODE_LINE } from "./main.js";
-
 export class ChartController {
-    constructor(svg, axis, lineChart, barChart, titleEl) {
-        this.svg = svg;
-        this.axis = axis;
+    constructor({
+        mainSvg,
+        boxSvg,
+        axisMain,
+        axisBox,
+        lineChart,
+        barChart,
+        boxPlotChart,
+        titleEl,
+        dataService
+    }) {
+        this.mainSvg = mainSvg;
+        this.boxSvg = boxSvg;
+
+        this.axisMain = axisMain;
+        this.axisBox = axisBox;
+
         this.lineChart = lineChart;
         this.barChart = barChart;
-        this.titleEl = titleEl;
+        this.boxPlotChart = boxPlotChart;
 
-        this.mode = MODE_LINE;
+        this.titleEl = titleEl;
+        this.dataService = dataService;
+
+        this.mode = "line";
     }
 
     setMode(mode) {
@@ -16,18 +31,48 @@ export class ChartController {
     }
 
     updateTitle(question) {
-        this.titleEl.text(question);
+        if (this.titleEl) this.titleEl.text(question);
     }
 
     update(data) {
-        const isBar = this.mode === MODE_BAR;
-        this.axis.setDomains(data, isBar);
-        this.axis.drawAxes(isBar);
 
-        if (this.mode === MODE_LINE) {
+        if (this.mode === "line") {
+            const xDomain = d3.extent(data, d => +d.YearStart);
+            const yDomain = d3.extent(data, d => +d.Data_Value);
+
+            this.axisMain.setLabels("Year", "Value");
+
+            this.axisMain.setDomains({
+                xDomain,
+                isBandScale: false,
+                yDomain
+            });
+
+            this.axisMain.drawAxes();
             this.lineChart.draw(data);
-        } else {
+            return;
+        }
+
+        if (this.mode === "bar") {
+            const xDomain = data.map(d => d.YearStart);
+            const yDomain = d3.extent(data, d => +d.Data_Value);
+
+            this.axisMain.setLabels("Year", "Value");
+
+            this.axisMain.setDomains({
+                xDomain,
+                isBandScale: true,
+                yDomain
+            });
+
+            this.axisMain.drawAxes();
             this.barChart.draw(data);
+            return;
+        }
+
+        if (this.mode === "boxplot") {
+            this.boxPlotChart.draw(data);
+            return;
         }
     }
 }

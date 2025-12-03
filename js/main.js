@@ -1,139 +1,62 @@
-import { BoxChartController } from "./boxchartcontroller.js";
 import { ChartController } from "./chartcontroller.js";
 import { DataService } from "./dataservice.js";
 import { BarChart } from "./barchart.js";
-import { AxisManager } from "./axismanager.js"
+import { AxisManager } from "./axismanager.js";
 import { LineChart } from "./linechart.js";
 import { createSvg } from "./layout.js";
+import BoxPlotChart from "./boxchart.js";
 
-export const MARGIN = { top: 70, right: 40, bottom: 50, left: 60 };
+import { initControls } from "./controls.js";
+
+export const MARGIN = { top: 70, right: 40, bottom: 50, left: 70 };
 export const WIDTH = 900 - MARGIN.left - MARGIN.right;
 export const HEIGHT = 450 - MARGIN.top - MARGIN.bottom;
 
 export const WIDTH_OUT = WIDTH + MARGIN.left + MARGIN.right;
 export const HEIGHT_OUT = HEIGHT + MARGIN.top + MARGIN.bottom;
 
-export const MODE_LINE = "line";
-export const MODE_BAR = "bar";
+export const DURATION = 600;
 
-export const TOPIC_MAIN = "main";
-export const TOPIC_BOXPLOT = "boxplot";
+export const TOOLTIP_OFFSET_X = 12
+export const TOOLTIP_OFFSET_Y = 28
 
-export const DURATION = 600
-
-const svg = createSvg("#chart");
+const svgMain = createSvg("#chart");
+const svgBox = createSvg("#boxplot");
 
 const tooltip = d3.select("body")
     .append("div")
-    .attr("class", "tooltip");
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
-function highlight(mode) {
-    d3.select("#lineIcon").classed("active", mode === MODE_LINE);
-    d3.select("#barIcon").classed("active", mode === MODE_BAR);
-}
-
-const title = svg.append("text")
+const title = svgMain.append("text")
     .attr("class", "chart-title")
     .attr("x", WIDTH / 2)
     .attr("y", -30)
     .attr("text-anchor", "middle")
     .style("font-weight", "600");
 
-const axis = new AxisManager(svg);
+const axisMain = new AxisManager(svgMain);
+const axisBox = new AxisManager(svgBox);
 
-const lineChart = new LineChart(svg, axis, tooltip);
-const barChart = new BarChart(svg, axis, tooltip);
+const lineChart = new LineChart(svgMain, axisMain, tooltip);
+const barChart = new BarChart(svgMain, axisMain, tooltip);
+const boxPlotChart = new BoxPlotChart(svgBox, tooltip, axisBox, title);
 
-const csvParts = [
-    "data/health_part1.csv",
-    "data/health_part2.csv",
-    "data/health_part3.csv",
-    "data/health_part4.csv",
-    "data/health_part5.csv",
-    "data/health_part6.csv",
-    "data/health_part7.csv",
-    "data/health_part8.csv",
-    "data/health_part9.csv",
-    "data/health_part10.csv",
-    "data/health_part11.csv",
-    "data/health_part12.csv",
-    "data/health_part13.csv",
-    "data/health_part14.csv",
-    "data/health_part15.csv"
-];
+const csvParts = Array.from({ length: 15 }, (_, i) => `data/health_part${i + 1}.csv`);
 
 const dataService = new DataService(csvParts);
 await dataService.load();
 
-const controller = new ChartController(svg, axis, lineChart, barChart, title);
-
-const boxController = new BoxChartController("#boxplot", dataService, tooltip);
-boxController.init(WIDTH_OUT, HEIGHT_OUT);
-
-function showMainChart() {
-    document.getElementById("main-chart-wrapper").style.display = "";
-    document.getElementById("boxplot-wrapper").style.display = "none";
-    d3.selectAll(".view-btn").classed("active", false);
-    d3.select("#btn-main-chart").classed("active", true);
-}
-
-function showBoxplot() {
-    document.getElementById("main-chart-wrapper").style.display = "none";
-    document.getElementById("boxplot-wrapper").style.display = "";
-    d3.selectAll(".view-btn").classed("active", false);
-    d3.select("#btn-boxplot").classed("active", true);
-
-    boxController.render();
-}
-
-function updateFromUI() {
-    const questionSelect = document.getElementById("questionSelect").value;
-    const data = dataService.getYearlyAverages(questionSelect);
-    controller.updateTitle(questionSelect);
-    controller.update(data);
-}
-
-document.getElementById("questionSelect").addEventListener("change", () => {
-    updateFromUI();
+const controller = new ChartController({
+    mainSvg: svgMain,
+    boxSvg: svgBox,
+    axisMain,
+    axisBox,
+    lineChart,
+    barChart,
+    boxPlotChart,
+    titleEl: title,
+    dataService
 });
 
-document.getElementById("lineIcon").addEventListener("click", () => {
-    controller.setMode(MODE_LINE);
-    highlight(MODE_LINE);
-    updateFromUI();
-});
-
-document.getElementById("barIcon").addEventListener("click", () => {
-    controller.setMode(MODE_BAR);
-    highlight(MODE_BAR);
-    updateFromUI();
-});
-
-document.getElementById("btn-main-chart").addEventListener("click", () => {
-    showMainChart();
-});
-document.getElementById("btn-main-chart").addEventListener("click", () => {
-    showMainChart();
-    updateToolbar(TOPIC_MAIN);
-});
-
-document.getElementById("btn-boxplot").addEventListener("click", () => {
-    showBoxplot();
-    updateToolbar(TOPIC_BOXPLOT);
-});
-
-highlight(MODE_LINE);
-showMainChart();
-updateFromUI();
-
-function updateToolbar(view) {
-    const toolbar = document.getElementById("toolbarId");
-    
-    if (view === TOPIC_MAIN) {
-        toolbar.style.display = "flex";
-    }
-
-    if (view === TOPIC_BOXPLOT) {
-        toolbar.style.display = "none";
-    }
-}
+initControls(controller, dataService);

@@ -1,4 +1,4 @@
-import { DURATION, HEIGHT } from "./main.js";
+import { DURATION, HEIGHT, TOOLTIP_OFFSET_X, TOOLTIP_OFFSET_Y } from "./main.js";
 import { pointTooltipHTML } from "./tooltip.js";
 
 export class BarChart {
@@ -29,8 +29,8 @@ export class BarChart {
             .on("mouseover", (event, d) => {
                 this.tooltip.style("opacity", 1)
                     .html(pointTooltipHTML(d))
-                    .style("left", (event.pageX + 12) + "px")
-                    .style("top", (event.pageY - 28) + "px");
+                    .style("left", (event.pageX + TOOLTIP_OFFSET_X) + "px")
+                    .style("top", (event.pageY - TOOLTIP_OFFSET_Y) + "px");
             })
             .on("mouseout", () => this.tooltip.style("opacity", 0))
             .merge(bars)
