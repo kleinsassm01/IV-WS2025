@@ -7,7 +7,8 @@ export class ChartController {
         lineChart,
         barChart,
         boxPlotChart,
-        titleEl,
+        titleElMain,
+        titleElBox,
         dataService
     }) {
         this.mainSvg = mainSvg;
@@ -20,7 +21,9 @@ export class ChartController {
         this.barChart = barChart;
         this.boxPlotChart = boxPlotChart;
 
-        this.titleEl = titleEl;
+        this.titleMain = titleElMain;
+        this.titleBox = titleElBox;
+
         this.dataService = dataService;
 
         this.mode = "line";
@@ -30,8 +33,12 @@ export class ChartController {
         this.mode = mode;
     }
 
-    updateTitle(question) {
-        if (this.titleEl) this.titleEl.text(question);
+    updateTitle(text) {
+        if (this.mode === "boxplot") {
+            this.titleBox.text(text);
+        } else {
+            this.titleMain.text(text);
+        }
     }
 
     update(data) {
@@ -71,6 +78,7 @@ export class ChartController {
         }
 
         if (this.mode === "boxplot") {
+            this.updateTitle("Mean number of days with activity limitations in the past month");
             this.boxPlotChart.draw(data);
             return;
         }

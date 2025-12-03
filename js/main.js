@@ -3,7 +3,7 @@ import { DataService } from "./dataservice.js";
 import { BarChart } from "./barchart.js";
 import { AxisManager } from "./axismanager.js";
 import { LineChart } from "./linechart.js";
-import { createSvg } from "./layout.js";
+import { createSvg, createChartTitle } from "./layout.js";
 import BoxPlotChart from "./boxchart.js";
 
 import { initControls } from "./controls.js";
@@ -28,19 +28,15 @@ const tooltip = d3.select("body")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-const title = svgMain.append("text")
-    .attr("class", "chart-title")
-    .attr("x", WIDTH / 2)
-    .attr("y", -30)
-    .attr("text-anchor", "middle")
-    .style("font-weight", "600");
+const titleMain = createChartTitle(svgMain);
+const titleBox = createChartTitle(svgBox);
 
 const axisMain = new AxisManager(svgMain);
 const axisBox = new AxisManager(svgBox);
 
 const lineChart = new LineChart(svgMain, axisMain, tooltip);
 const barChart = new BarChart(svgMain, axisMain, tooltip);
-const boxPlotChart = new BoxPlotChart(svgBox, tooltip, axisBox, title);
+const boxPlotChart = new BoxPlotChart(svgBox, tooltip, axisBox);
 
 const csvParts = Array.from({ length: 15 }, (_, i) => `data/health_part${i + 1}.csv`);
 
@@ -55,7 +51,8 @@ const controller = new ChartController({
     lineChart,
     barChart,
     boxPlotChart,
-    titleEl: title,
+    titleElMain: titleMain,
+    titleElBox: titleBox,
     dataService
 });
 
