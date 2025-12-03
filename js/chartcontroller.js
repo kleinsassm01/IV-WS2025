@@ -47,7 +47,7 @@ export class ChartController {
             const xDomain = d3.extent(data, d => +d.YearStart);
             const yDomain = d3.extent(data, d => +d.Data_Value);
 
-            this.axisMain.setLabels("Year", "Value");
+            this.axisMain.setLabels("Year", "Percentage (%)");
 
             this.axisMain.setDomains({
                 xDomain,
@@ -64,7 +64,7 @@ export class ChartController {
             const xDomain = data.map(d => d.YearStart);
             const yDomain = d3.extent(data, d => +d.Data_Value);
 
-            this.axisMain.setLabels("Year", "Value");
+            this.axisMain.setLabels("Year", "Percentage (%)");
 
             this.axisMain.setDomains({
                 xDomain,
